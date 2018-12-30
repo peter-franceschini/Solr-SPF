@@ -1,0 +1,79 @@
+﻿<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="solrurl-tab" data-toggle="tab" href="#solrurl" role="tab" aria-controls="solrurl" aria-selected="true">Solr Url</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="uploadfile-tab" data-toggle="tab" href="#uploadfile" role="tab" aria-controls="uploadfile" aria-selected="false">Upload File</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="rawoutput-tab" data-toggle="tab" href="#rawoutput" role="tab" aria-controls="rawoutput" aria-selected="false">Raw Solr Output</a>
+    </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="solrurl" role="tabpanel" aria-labelledby="solrurl-tab">
+        <br />
+        <div class="input-group mb-1">
+            <input type="text" class="form-control" id="SolrUrl" placeholder="Paste in a Solr URL (such as http://localhost:8983/solr/mycollection/select?q=*:*)" style="width:600px">
+            <div class="input-group-append">
+                <button id="LoadFromSolr" type="submit" class="btn btn-outline-primary">Explain!</button>
+            </div>
+        </div>
+        <small id="solrUrlHelp" class="form-text text-muted">The full URL from your solr query</small>
+    </div>
+    <div class="tab-pane fade" id="uploadfile" role="tabpanel" aria-labelledby="uploadfile-tab">
+        <br />
+        <form method="post" enctype="multipart/form-data" asp-controller="UploadFile" asp-action="Index">
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="file" name="files" class="form-control-file" />
+                    <small id="uploadHelp" class="form-text text-muted">JSON format file exported from Solr query console. This must be of JSON format, and with debug enabled. </small>
+                </div>
+            </div>
+            <br /> <br /> <br />
+            <div class="form-group" style="margin-top:15px">
+                <div class="col-md-10">
+                    <input type="submit" class="btn btn-primary" value="Explain!" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="tab-pane fade" id="rawoutput" role="tabpanel" aria-labelledby="rawoutput-tab">
+        <br />
+
+        <div class="form-group">
+            <label for="SolrJson">Solr JSON Response</label>
+            <textarea class="form-control" id="SolrTextArea" cols="50" rows="5"></textarea>
+            <small id="solrUrlHelp" class="form-text text-muted">Paste the full JSON response from executing your Solr query. This must be of JSON format, and with debug enabled.</small>
+        </div>
+
+        <br />
+        <button id="PostFromTextArea" type="submit" class="btn btn-primary">Explain!</button>
+    </div>
+</div>
+
+<!-- Insecure Solr Server Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="mixedContentModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Mixed Content Warning!</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    It looks like the Solr URL you are requesting is HTTP not HTTPS.
+                    This causes a mixed content warning in your browser and prevents the request from being executed.
+                </p>
+                <p>
+                    The easiest way to resolve this is to update the URL from http to https if this is available on your Solr service.
+                    If this is not possible, you can add your Solr URL to the following Chrome flag to allow mixed-content from that domain: chrome://flags/#unsafely-treat-insecure-origin-as-secure
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

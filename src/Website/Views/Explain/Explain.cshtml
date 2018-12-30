@@ -1,0 +1,81 @@
+﻿@model Website.Models.ExplainViewModels.ExplainViewModel
+@using Website.Models.Explain;
+
+@{
+    ViewData["Title"] = "Explain";
+}
+
+<br />
+
+<div class="card">
+    <div class="card-header">
+        Raw Query
+    </div>
+    <div class="card-body">
+        <code>@Model.SolrQueryResponse.Debug.rawquerystring</code>
+    </div>
+</div>
+    
+<br />
+
+<div class="card">
+    <div class="card-header">
+        Compare
+    </div>
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Compare two documents' scores'</h6>
+
+        @using (Html.BeginForm("Comparison", "Explain", FormMethod.Get, null))
+        {
+            @Html.HiddenFor(m => m.Guid)
+            <div class="row">
+                <div class="col-md-5">
+                    @Html.Label("Document One")
+                    @Html.DropDownListFor(m => m.DocumentOneIndex, Model.ComparisonDocumentSelectList, new { @class = "form-control" })
+                </div>
+                <div class="col-md-1" style="text-align:center">
+                    <label>vs</label>
+                </div>
+                <div class="col-md-5">
+                    @Html.Label("Document Two")
+                    @Html.DropDownListFor(m => m.DocumentTwoIndex, Model.ComparisonDocumentSelectList, new { @class = "form-control" })
+                </div>
+            </div>
+            
+            <br />
+            <button type="submit" class="btn btn-primary float-right" style="">Compare</button>
+            <br />
+        }
+    </div>
+</div>
+
+<br />
+<br />
+
+<h3>Documents (@Model.SolrQueryResponse.Response.DocumentModels.Count())</h3>
+<br />
+
+@{
+    var iteration = 0;
+}
+
+@foreach (var document in Model.SolrQueryResponse.Response.DocumentModels)
+{
+    var explainModel = Model.SolrQueryResponse.Debug.ExplainModels.ToList()[iteration];
+
+    var documentExplain = new DocumentExplain()
+    {
+        ExplainModel = explainModel,
+        DocumentModel = document,
+        Iteration = iteration
+    };
+
+    @Html.Partial("_DocumentExplain", documentExplain)
+
+    iteration++;
+
+    <br />
+}
+
+<br />
+<br />

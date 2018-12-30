@@ -1,0 +1,83 @@
+﻿<main role="main">
+    <section class="jumbotron">
+        <div class="container">
+            <div class="row justify-content-center text-center section-intro">
+                <div class="col-12 col-md-9 col-lg-8">
+                    <h2 class="display-4">Solr Query Result Debugging and Explanation</h2>
+                    <span class="lead">
+                        Understand <i>why</i>.
+                        Solr SPF provides detailed document score breakdowns to help you understand
+                        and tune your search results
+                    </span>
+                    <p class="text-center">
+                        <span>Get started now by uploading your Solr Query, or <a asp-controller="Explain" asp-action="Index">see some examples</a></span>
+                    </p>
+                </div>
+            </div>
+            <hr />
+
+            <br />
+            <div style="width:auto">
+                @Html.Partial("_Upload")
+            </div>
+        </div>
+    </section>
+
+    <br />
+
+    <div class="container">
+        <div class="row justify-content-center text-center section-intro">
+            <div class="col-12 col-md-9 col-lg-8">
+                <span class="title-decorative">Meet Solr SPF</span>
+                <h2 class="display-4">Protecting you from the complexities of Solr</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Upload & Analyze</h2>
+                <p>Upload your Solr query so we can analyze and breakdown your results</p>
+            </div>
+            <div class="col-md-4">
+                <h2>Understand</h2>
+                <p>Use our breakdowns and visualizations to understand your results and compare scores of different documents</p>
+            </div>
+            <div class="col-md-4">
+                <h2>Tune</h2>
+                <p>Use your new understanding to tune your queries to meet your expectations</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<hr class="featurette-divider">
+
+<div class="row featurette">
+    <div class="col-md-5">
+        <h2 class="featurette-heading">Field Score Breakdown</h2>
+        <p class="lead">Solr's raw query explain breakdowns presented in an easy to read, expanding interface.</p>
+    </div>
+    <div class="col-md-7">
+        <img class="featurette-image img-fluid mx-auto" src="images/features/solr.2.png" alt="Generic placeholder image">
+    </div>
+</div>
+<hr class="featurette-divider">
+<div class="row featurette">
+    <div class="col-md-5 order-md-2">
+        <h2 class="featurette-heading">Field Query Impact</h2>
+        <p class="lead">Visualize the impact of each field query of the document's overall score.</p>
+    </div>
+    <div class="col-md-7 order-md-1">
+        <img class="featurette-image img-fluid mx-auto" src="/images/features/solr7.2.png" alt="Generic placeholder image">
+    </div>
+</div>
+<hr class="featurette-divider">
+<div class="row featurette">
+    <div class="col-md-5">
+        <h2 class="featurette-heading">Document Score Comparison</h2>
+        <p class="lead">Compare the scores of two documents with both visualizations and raw analyzed data.</p>
+    </div>
+    <div class="col-md-7">
+        <img class="featurette-image img-fluid mx-auto" src="/images/features/solr3.2.png" alt="Generic placeholder image">
+    </div>
+</div>

@@ -1,0 +1,96 @@
+﻿@model Website.Models.Explain.ExplainLineDouble
+@using Website.Helpers;
+@using Website.Extensions;
+
+@if (Model.ExplainLine1?.Score == Model.ExplainLine2?.Score)
+{
+    <span class="pull-left">
+        @Model.ExplainLine1.Score
+
+        = @Html.Raw(Model.ExplainLine1.Raw.RemoveScore().Highlight(Model.ExplainLine1.FieldName))
+    </span>
+}
+else
+{
+    <span class="pull-left">
+        @if (Model.ExplainLine1 != null && Model.ExplainLine2 != null)
+        {
+            var score1 = Model.ExplainLine1?.Score == null ? 0 : Model.ExplainLine1.Score;
+            var score2 = Model.ExplainLine2?.Score == null ? 0 : Model.ExplainLine2.Score;
+            var difference = Math.Abs(score1 - score2);
+
+            <span>&Delta; @difference.ToSignificantFigures(3)</span>
+        }
+        else
+        {
+            var score = Model.ExplainLine1?.Score == null ? Model.ExplainLine2?.Score : Model.ExplainLine1.Score;
+
+            <span>&Delta; @score.ToSignificantFigures(3)</span>
+        }
+
+        @if(Model.ExplainLine1 != null)
+        {
+            if(Model.ExplainLine1.FieldName != null)
+            {
+                @:= @Html.Raw(Model.ExplainLine1.Raw.RemoveScore().Highlight(Model.ExplainLine1.FieldName))
+            }
+            else
+            {
+                @:= @Html.Raw(Model.ExplainLine1.Raw.RemoveScore())
+            }
+        }
+        else
+        {
+            if(Model.ExplainLine2.FieldName != null)
+            {
+                @:= @Html.Raw(Model.ExplainLine2.Raw.RemoveScore().Highlight(Model.ExplainLine2.FieldName))
+            }
+            else
+            {
+                @:= @Html.Raw(Model.ExplainLine2.Raw.RemoveScore())
+            }
+        }
+    </span>
+
+    <span class="pull-right">
+        (
+        @if (Model.ExplainLine1 != null)
+        {
+            @:@Model.ExplainLine1.Score
+        }
+        else
+        {
+            @: 0
+        }
+
+        @if (Model.ExplainLine1 != null && Model.ExplainLine2 != null)
+        {
+            if(Model.ExplainLine1.Score > Model.ExplainLine2.Score)
+            {
+                 <span> > </span>
+            }
+            else
+            {
+                 <span> < </span>
+            }
+        }
+        else if(Model.ExplainLine1 != null)
+        {
+            <span> > </span>
+        }
+        else if(Model.ExplainLine2 != null)
+        {
+             <span> < </span>
+        }
+
+        @if (Model.ExplainLine2 != null)
+        {
+            @:@Model.ExplainLine2.Score
+        }
+        else
+        {
+            @: 0
+        }
+        )
+    </span>
+}

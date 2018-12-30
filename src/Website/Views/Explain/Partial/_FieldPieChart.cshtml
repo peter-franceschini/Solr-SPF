@@ -1,0 +1,41 @@
+﻿@model Website.Models.Explain.ExplainModel
+
+@{ 
+    string uid = Guid.NewGuid().ToString();
+}
+
+<canvas id="pieChart_@uid" width="450" height="450" style="display: inline"></canvas>
+
+<script>
+    var ctx = $("#pieChart_@uid");
+
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: @Json.Serialize(Model.PieChartFieldNames),
+            datasets: [{
+                label: 'Points',
+                data: @Json.Serialize(Model.PieChartDataPoints),
+                backgroundColor: @Json.Serialize(Model.PieChartColors),
+            }]
+        },
+        options: {
+            responsive: false,
+            tooltipEvents: [],
+            showTooltips: true,
+            onAnimationComplete: function () {
+                this.showTooltip(this.segments, true);
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[0].data[tooltipItem.index];
+                        var label = data.labels[tooltipItem.index];
+                        return label;
+                    }
+                }
+            }
+        }
+    });
+
+</script>

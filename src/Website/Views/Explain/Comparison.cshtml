@@ -1,0 +1,87 @@
+﻿@model Website.Models.ExplainViewModels.ExplainComparisonViewModel
+@using Website.Models.Explain;
+
+@{
+    ViewData["Title"] = "Comparison";
+}
+
+<h1>Comparison</h1>
+<br />
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Documents</h5>
+        <p>Document 1: <code>@Model.ExplainModelOne.DocumentId</code></p>
+        <p>Document 2: <code>@Model.ExplainModelTwo.DocumentId</code></p>
+    </div>
+</div>
+
+<br />
+
+
+
+<br />
+
+<div class="card">
+    <div class="card-header">
+        Field Comparison
+    </div>
+    <div class="card-body">
+        <p class="float-right"><i>(Doc 1 vs Doc 2)</i></p>
+        <br />
+        <br />
+        @foreach (var field in Model.CombinedFieldQueryList)
+        {
+            var explainLineDouble = new ExplainLineDouble();
+            explainLineDouble.ExplainLine1 = Model.ExplainModelOne.GetFieldExplainLines().FirstOrDefault(f => f.FieldName == field.Name && f.FieldQuery == field.Query);
+            explainLineDouble.ExplainLine2 = Model.ExplainModelTwo.GetFieldExplainLines().FirstOrDefault(f => f.FieldName == field.Name && f.FieldQuery == field.Query);
+
+            @Html.Partial("_FieldComparisonTreeNode", explainLineDouble)
+        }
+    </div>
+</div>
+
+
+
+<br />
+
+
+<div class="card">
+    <div class="card-header">
+        Score Distribution
+    </div>
+    <div class="card-body" style="text-align:center">
+        @Html.Partial("_ComparisonRadarChart", Model)
+    </div>
+</div>
+
+<br />
+<h3>Documents</h3>
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        @{
+            var documentExplainOne = new DocumentExplain()
+            {
+                ExplainModel = Model.ExplainModelOne,
+                DocumentModel = Model.DocumentModelOne,
+                Iteration = 1
+            };
+        }
+
+        @Html.Partial("_DocumentExplain", documentExplainOne)
+    </div>
+    <div class="col-md-6">
+        @{
+            var documentExplainTwo = new DocumentExplain()
+            {
+                ExplainModel = Model.ExplainModelTwo,
+                DocumentModel = Model.DocumentModelTwo,
+                Iteration = 2
+            };
+        }
+
+        @Html.Partial("_DocumentExplain", documentExplainTwo)
+    </div>
+</div>

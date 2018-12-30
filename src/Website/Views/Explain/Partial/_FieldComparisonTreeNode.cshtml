@@ -1,0 +1,73 @@
+﻿@model Website.Models.Explain.ExplainLineDouble
+@using Website.Models.Explain;
+
+@{
+    var guid = Guid.NewGuid();
+}
+
+<div class="card treenode">
+    <div class="card-header" id="heading_@guid.ToString()">
+        @{
+            var color = "green";
+
+            if (Model.ExplainLine1?.Score != Model.ExplainLine2?.Score)
+            {
+                color = "red";
+            }
+        }
+
+        @if ((Model.ExplainLine1 != null && Model.ExplainLine1.HasChildren()) || (Model.ExplainLine2 != null && Model.ExplainLine2.HasChildren()))
+        {
+            <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse_@guid.ToString()" aria-expanded="false" aria-controls="collapse_@guid.ToString()" style="color:@color; width:100%; text-align:left;">
+                @Html.Partial("_FieldComparisonTreeNodeLine", Model)
+            </a>
+        }
+        else
+        {
+            <span style="color:@color; padding:6px 12px; display:inline-block; width:100%">
+                @Html.Partial("_FieldComparisonTreeNodeLine", Model)
+            </span>
+        }
+    </div>
+    <div id="collapse_@guid.ToString()" class="collapse" aria-labelledby="heading_@guid.ToString()">
+        <div class="card-body">
+            <ul>
+                @{
+                    var totalChildren = 0;
+                    if (Model.ExplainLine1 != null && Model.ExplainLine1.Children != null && Model.ExplainLine2 != null && Model.ExplainLine2.Children != null)
+                    {
+                        totalChildren = Model.ExplainLine1.Children.Count();
+                        if (Model.ExplainLine2.Children.Count() > totalChildren)
+                        {
+                            totalChildren = Model.ExplainLine2.Children.Count();
+                        }
+                    }
+                    else if (Model.ExplainLine1 != null && Model.ExplainLine1.Children != null)
+                    {
+                        totalChildren = Model.ExplainLine1.Children.Count();
+                    }
+                    else if (Model.ExplainLine2 != null && Model.ExplainLine2.Children != null)
+                    {
+                        totalChildren = Model.ExplainLine2.Children.Count();
+                    }
+
+                    for (int i = 0; i < totalChildren; i++)
+                    {
+                        var model = new ExplainLineDouble();
+                        if (Model.ExplainLine1?.Children != null && Model.ExplainLine1.Children.Count() > i)
+                        {
+                            model.ExplainLine1 = Model.ExplainLine1.Children[i];
+                        }
+
+                        if (Model.ExplainLine2?.Children != null && Model.ExplainLine2.Children.Count() > i)
+                        {
+                            model.ExplainLine2 = Model.ExplainLine2.Children[i];
+                        }
+
+                        Html.RenderPartial("_FieldComparisonTreeNode", model);
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>

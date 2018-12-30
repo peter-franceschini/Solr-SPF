@@ -1,0 +1,12 @@
+﻿@model Website.Models.ExplainViewModels.ExplainListingViewModel
+
+@{
+    ViewData["Title"] = "Explain Upload";
+}
+
+<h1>Solr Explains</h1>
+
+<br />
+
+<!-- Record listing -->
+@Html.Partial("_ExplainListing", Model)

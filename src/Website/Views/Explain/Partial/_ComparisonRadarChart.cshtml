@@ -1,0 +1,49 @@
+﻿@model Website.Models.ExplainViewModels.ExplainComparisonViewModel
+
+<canvas id="radarChart" width="750" height="550" style="display: inline"></canvas>
+
+<script>
+    var ctx = $("#radarChart");
+
+    var myChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: @Json.Serialize(Model.RadarChartLabels),
+            datasets: [
+                @foreach(var dataset in Model.RadarChartDatasetList)
+                {
+                    <text>
+                    {
+                        label: '@dataset.Label',
+                        data: @Json.Serialize(dataset.RadarChartDataPoints),
+                        fill: true,
+                        backgroundColor: '@dataset.ColorTwo',
+                        borderColor: '@dataset.ColorOne',
+                        pointBackgroundColor: '@dataset.ColorOne',
+                        pointBorderColor: "#fff",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor:'@dataset.ColorOne'
+                    },
+                    </text>
+                }
+            ]
+        },
+        options: {
+            responsive: false,
+            tooltipEvents: [],
+            showTooltips: true,
+            onAnimationComplete: function () {
+                this.showTooltip(this.segments, true);
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var value = data.datasets[0].data[tooltipItem.index];
+                        var label = data.labels[tooltipItem.index];
+                        return label;
+                    }
+                }
+            }
+        }
+    });
+</script>

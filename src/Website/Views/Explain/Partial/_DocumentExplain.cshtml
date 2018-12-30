@@ -1,0 +1,80 @@
+﻿@model Website.Models.Explain.DocumentExplain
+
+<div class="card" style="margin-bottom: 0px;">
+    <div class="card-body">
+        <h5 class="card-title">
+            @if (Model.ExplainModel.DocumentId != null)
+            {
+                <code>@Model.ExplainModel.DocumentId</code>
+                <br />
+            }
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">Score: @Model.ExplainModel.DocumentScore</h6>
+
+        <br />
+        <h4>Field Values</h4>
+        <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead class="thead-light">
+                <tr>
+                    <th>Field Name</th>
+                    <th>Field Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var field in Model.DocumentModel.Fields.OrderBy(o => o.Name).Take(3))
+                {
+                    <tr>
+                        <td>@field.Name</td>
+                        <td>@field.Value</td>
+                    </tr>
+                }
+            </tbody>
+            <tbody class="collapse" id="collapsetbody_@Model.Iteration">
+                @foreach (var field in Model.DocumentModel.Fields.OrderBy(o => o.Name).Skip(3))
+                {
+                    <tr>
+                        <td>@field.Name</td>
+                        <td>@field.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (Model.DocumentModel.Fields.Count() > 3)
+        {
+            <button class="btn btn-default float-right" type="button" data-toggle="collapse" data-target="#collapsetbody_@Model.Iteration" aria-expanded="false" aria-controls="collapsetbody_@Model.Iteration">
+                Show More/Less
+            </button>
+        }
+
+        <br />
+        <br />
+
+        <h4>Field Query Impact</h4>
+        <p><i>Impact of each field query on the documents overall score</i></p>
+        <div class="panel panel-default" style="text-align:center">
+            @Html.Partial("_FieldPieChart", Model.ExplainModel)
+        </div>
+
+        <br />
+        <h4>Field Query Score Breakdown</h4>
+        <p><i>Detailed explain breakdown of each query's score composition</i></p>
+        <div>
+            @foreach (var explainLine in Model.ExplainModel.GetFieldExplainLines().Where(e => e.ScorePercent != 0).OrderByDescending(o => o.ScorePercent))
+            {
+                @Html.Partial("_TreeNode", explainLine)
+            }
+            <i>Click to expand</i>
+        </div>
+
+        <br />
+        <h4>Raw Debug</h4>
+        <p><i>Raw Solr explain</i></p>
+        <div class="accordion">
+            <ul style="padding: 0px;">
+                @Html.Partial("_TreeNode", Model.ExplainModel.ExplainLine)
+            </ul>
+        </div>
+        <i>Click to expand</i>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+﻿@model Website.Models.Explain.ExplainLine
+@using Website.Extensions
+
+@{
+    var guid = Guid.NewGuid().ToString();
+}
+
+<div class="card treenode">
+    <div class="card-header" id="heading_@guid">
+        @if (Model.HasChildren())
+        {
+            <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse_@guid" aria-expanded="false" aria-controls="collapse_@guid">
+                @if (Model.ScorePercent != null)
+                {
+                    <b>@Model.ScorePercent%</b>
+                }
+
+                @Html.Raw(Model.Raw.ToString().Highlight(Model.FieldName))
+            </a>
+        }
+        else
+        {
+            <span style="padding:6px 12px; display:inline-block;">
+                @if (Model.ScorePercent != null)
+                {
+                    <b>@Model.ScorePercent%</b>
+                }
+                @Html.Raw(Model.Raw.ToString().Highlight(Model.FieldName))
+            </span>
+        }
+    </div>
+    <div id="collapse_@guid" class="collapse" aria-labelledby="heading_@guid">
+        <div class="card-body">
+            <ul>
+                @{
+                    if (Model.Children != null && Model.Children.Any())
+                    {
+                        foreach (var c in Model.Children)
+                        {
+                            Html.RenderPartial("_TreeNode", c);
+                        }
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
